@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { auth, signOut } from '../lib/auth';
+import { auth } from '../lib/auth';
+import SignOutButton from './SignOutButton';
 
 export default async function Header() {
 	const session = await auth();
@@ -18,21 +19,7 @@ export default async function Header() {
 					Wokleys
 				</span>
 			</div>
-			{session && (
-				<form
-					action={async (formData) => {
-						'use server';
-						await signOut();
-					}}
-				>
-					<button
-						type="submit"
-						className="flex items-center rounded-md bg-indigo-600 px-3 py-2 text-base"
-					>
-						<div className="block md:block">Déconnexion</div>
-					</button>
-				</form>
-			)}
+			{session && <SignOutButton />}
 		</header>
 	);
 }

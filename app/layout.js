@@ -1,5 +1,5 @@
+import { robotoMono } from './lib/fonts';
 import Header from './ui/Header';
-import { robotoMono } from './ui/fonts';
 import './ui/globals.css';
 
 export const metadata = {

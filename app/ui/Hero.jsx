@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { signIn } from '../lib/auth';
+import SignInButton from '../ui/SignInButton';
 
 export default function Hero() {
 	return (
@@ -13,19 +13,7 @@ export default function Hero() {
 					de vos clés <span>mythiques plus</span> pour votre coffre
 					hebdomadaire sur l&apos;ensemble de vos personnages.
 				</p>
-				<form
-					action={async () => {
-						'use server';
-						await signIn('battlenet');
-					}}
-				>
-					<button
-						type="submit"
-						className="self-start rounded-md border border-solid border-gray-300 bg-indigo-600 px-3 py-2 text-base"
-					>
-						Connexion avec Battlenet
-					</button>
-				</form>
+				<SignInButton />
 			</div>
 			<div className="flex items-center justify-center p-8 md:m-auto md:w-3/5">
 				<Image
