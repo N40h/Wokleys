@@ -2,12 +2,16 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { setSelectedCharacter } from '../lib/reducers/characterSlice';
 import {
+	fetchMythicPlusHighestRuns,
+	fetchMythicPlusRank,
 	fetchMythicPlusScoresCurrentSeason,
+	fetchMythicPlusWeeklyHighestRuns,
 	fetchProfile,
 } from '../lib/services/api';
 
-export default function NavLinks({ characters }) {
+export default function NavLinks({ characters = [] }) {
 	const dispatch = useDispatch();
 	const [realms, setRealms] = useState([]);
 	const [selectedRealm, setSelectedRealm] = useState('');
@@ -26,8 +30,16 @@ export default function NavLinks({ characters }) {
 	};
 
 	const handleCharacterClick = (realm, name) => {
+		const selectedCharacter = characters.find(
+			(character) =>
+				character.realm.slug === realm && character.name === name
+		);
+		dispatch(setSelectedCharacter(selectedCharacter));
 		dispatch(fetchProfile(realm, name));
 		dispatch(fetchMythicPlusScoresCurrentSeason(realm, name));
+		dispatch(fetchMythicPlusHighestRuns(realm, name));
+		dispatch(fetchMythicPlusWeeklyHighestRuns(realm, name));
+		dispatch(fetchMythicPlusRank(realm, name));
 	};
 
 	return (
@@ -45,33 +57,35 @@ export default function NavLinks({ characters }) {
 					</option>
 				))}
 			</select>
-			{characters
-				.filter(
-					(character) => character.realm.name.en_US === selectedRealm
-				)
-				.map((character, index) => {
-					return (
-						<div
-							key={index}
-							className="flex h-10 grow cursor-pointer items-center gap-2 rounded-md bg-indigo-600 p-2 text-sm md:flex-none"
-							onClick={() =>
-								handleCharacterClick(
-									character.realm.slug,
-									character.name
-								)
-							}
-						>
-							<Image
-								src={character.avatar}
-								alt={`Avatar de ${character.name}`}
-								width={30}
-								height={30}
-								className="rounded-full border border-solid border-zinc-950"
-							/>
-							<p>{character.name}</p>
-						</div>
-					);
-				})}
+			{characters &&
+				characters
+					.filter(
+						(character) =>
+							character.realm.name.en_US === selectedRealm
+					)
+					.map((character, index) => {
+						return (
+							<div
+								key={index}
+								className="flex h-10 grow cursor-pointer items-center gap-2 rounded-md bg-indigo-600 p-2 text-sm md:flex-none"
+								onClick={() =>
+									handleCharacterClick(
+										character.realm.slug,
+										character.name
+									)
+								}
+							>
+								<Image
+									src={character.avatar}
+									alt={`Avatar de ${character.name}`}
+									width={30}
+									height={30}
+									className="rounded-full border border-solid border-zinc-950"
+								/>
+								<p>{character.name}</p>
+							</div>
+						);
+					})}
 		</>
 	);
 }

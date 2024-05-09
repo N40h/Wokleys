@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const characterSlice = createSlice({
 	name: 'character',
 	initialState: {
+		selectedCharacter: null,
 		characterName: '',
 		selectedRealm: '',
 		thumbnail_url: '',
@@ -12,6 +13,9 @@ const characterSlice = createSlice({
 		mythic_plus_rank: '',
 	},
 	reducers: {
+		setSelectedCharacter(state, action) {
+			state.selectedCharacter = action.payload;
+		},
 		setCharacterName(state, action) {
 			state.characterName = action.payload;
 		},
@@ -37,6 +41,7 @@ const characterSlice = createSlice({
 });
 
 export const {
+	setSelectedCharacter,
 	setCharacterName,
 	setSelectedRealm,
 	setThumbnailUrl,
